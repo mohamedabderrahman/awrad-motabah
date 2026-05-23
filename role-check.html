@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role Check - اختبار الصلاحيات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+        
+        .info-box {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .label {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        
+        .value {
+            font-size: 18px;
+            font-weight: 700;
+            word-break: break-all;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .status {
+            text-align: center;
+            font-size: 48px;
+            margin: 20px 0;
+        }
+        
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Role Check - اختبار الصلاحيات</h1>
+        
+        <div class="status" id="status">⏳</div>
+        
+        <div class="info-box">
+            <div class="label">👤 Current User:</div>
+            <div class="value" id="userEmail">Loading...</div>
+        </div>
+        
+        <div class="info-box">
+            <div class="label">🆔 User UID:</div>
+            <div class="value" id="userUID">Loading...</div>
+        </div>
+        
+        <div class="info-box">
+            <div class="label">👑 Role:</div>
+            <div class="value" id="userRole">Loading...</div>
+        </div>
+        
+        <div class="info-box">
+            <div class="label">🏢 Tenant:</div>
+            <div class="value" id="tenantId">Loading...</div>
+        </div>
+        
+        <div class="info-box">
+            <div class="label">📊 Database Check:</div>
+            <pre id="dbCheck">Loading...</pre>
+        </div>
+        
+        <button class="btn" onclick="window.location.href='login.html'">🚪 Sign Out & Re-login</button>
+        <button class="btn" onclick="window.location.href='super-admin.html'">👑 Go to Super Admin</button>
+        <button class="btn" onclick="window.location.href='admin-panel.html'">⚙️ Go to Admin Panel</button>
+        <button class="btn" onclick="window.location.href='index.html'">🏠 Go to Dashboard</button>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <script>
+        async function checkRole() {
+            const status = document.getElementById('status');
+            const userEmail = document.getElementById('userEmail');
+            const userUID = document.getElementById('userUID');
+            const userRole = document.getElementById('userRole');
+            const tenantId = document.getElementById('tenantId');
+            const dbCheck = document.getElementById('dbCheck');
+            
+            // Wait for auth
+            authManager.onAuthStateChanged(async (user, role) => {
+                if (user) {
+                    // User info
+                    userEmail.textContent = user.email;
+                    userUID.textContent = user.uid;
+                    userRole.textContent = role;
+                    tenantId.textContent = tenantManager.tenantId;
+                    
+                    // Status
+                    if (role === 'superadmin') {
+                        status.textContent = '👑';
+                        userRole.style.color = '#fbbf24';
+                    } else if (role === 'admin') {
+                        status.textContent = '⚙️';
+                        userRole.style.color = '#60a5fa';
+                    } else {
+                        status.textContent = '👤';
+                        userRole.style.color = '#34d399';
+                    }
+                    
+                    // Database check
+                    try {
+                        const checks = {};
+                        
+                        // Check superadmin
+                        const superAdminRef = db.ref(`superadmin/${user.uid}`);
+                        const superAdminSnap = await superAdminRef.once('value');
+                        checks.superadmin = superAdminSnap.val();
+                        
+                        // Check admin in current tenant
+                        const adminRef = db.ref(`tenants/${tenantManager.tenantId}/admins/${user.uid}`);
+                        const adminSnap = await adminRef.once('value');
+                        checks.admin = adminSnap.val();
+                        
+                        // Check user data
+                        const userRef = tenantManager.userRef(user.uid);
+                        const userSnap = await userRef.once('value');
+                        checks.userData = userSnap.val();
+                        
+                        dbCheck.textContent = JSON.stringify(checks, null, 2);
+                    } catch (error) {
+                        dbCheck.textContent = 'Error: ' + error.message;
+                    }
+                } else {
+                    status.textContent = '❌';
+                    userEmail.textContent = 'Not signed in';
+                    userUID.textContent = 'N/A';
+                    userRole.textContent = 'none';
+                    tenantId.textContent = 'N/A';
+                    dbCheck.textContent = 'Please sign in first';
+                }
+            });
+        }
+        
+        checkRole();
+    </script>
+</body>
+</html>
