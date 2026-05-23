@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الورد اليومي - الصفحة الرئيسية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #14b8a6;
+            --primary-light: #2dd4bf;
+            --primary-lighter: #99f6e4;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --success: #22c55e;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        .header {
+            background: var(--surface);
+            padding: 16px 20px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--primary-lighter);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--primary);
+        }
+        .user-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            position: relative;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .icon-btn:hover {
+            background: var(--background);
+        }
+        .badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #ef4444;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .date-card {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .date-main {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        .prayer-times {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+        .progress-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            color: white;
+            box-shadow: 0 8px 24px rgba(20, 184, 166, 0.3);
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .progress-title {
+            font-size: 18px;
+            font-weight: 600;
+            opacity: 0.95;
+        }
+        .progress-percentage {
+            font-size: 32px;
+            font-weight: 700;
+        }
+        .progress-bar {
+            height: 14px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 7px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 7px;
+            width: 73.7%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .progress-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        .template-card {
+            background: var(--primary-lighter);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .template-info {
+            flex: 1;
+        }
+        .template-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        .template-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary);
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .wird-card {
+            background: var(--surface);
+            border-radius: 14px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            overflow: visible;
+        }
+        .wird-header {
+            padding: 18px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .wird-header:hover {
+            background: var(--background);
+        }
+        .wird-title-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .wird-icon {
+            font-size: 28px;
+        }
+        .wird-title {
+            font-weight: 700;
+            font-size: 17px;
+        }
+        .wird-progress-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .wird-count {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        .wird-percentage {
+            background: var(--success);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .expand-icon {
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+        .wird-body {
+            padding: 0 20px 20px;
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+        }
+        .wird-card.collapsed .wird-body {
+            display: none;
+        }
+        .wird-card.collapsed .expand-icon {
+            transform: rotate(-90deg);
+        }
+        .wird-item {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .wird-item:last-child {
+            border-bottom: none;
+        }
+        .item-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            cursor: pointer;
+        }
+        .checkbox {
+            width: 26px;
+            height: 26px;
+            border: 2px solid var(--border);
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        .checkbox.checked {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        .item-text {
+            font-size: 15px;
+            flex: 1;
+        }
+        .item-text.completed {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+        .item-time {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="user-section">
+            <div class="user-avatar">أ</div>
+            <div class="user-name">أحمد محمد</div>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="window.location.href='7-notifications.html'">
+                🔔
+                <span class="badge">3</span>
+            </button>
+            <button class="icon-btn" onclick="window.location.href='6-settings.html'">⚙️</button>
+            <button class="icon-btn" onclick="window.location.href='1-login.html'">🚪</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="date-card">
+            <div class="date-main">📅 الأحد، 19 مايو 2026</div>
+            <div class="prayer-times">🕌 الفجر 05:23 | الظهر 12:45 | العصر 16:15 | المغرب 19:02 | العشاء 20:30</div>
+        </div>
+
+        <div class="progress-card">
+            <div class="progress-header">
+                <div class="progress-title">✅ التقدم اليوم</div>
+                <div class="progress-percentage">73.7%</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-details">
+                <span><strong>45</strong> / 61 بند</span>
+                <span>🔥 Streak: <strong>12</strong> يوم</span>
+            </div>
+        </div>
+
+        <div class="template-card">
+            <div class="template-info">
+                <div class="template-label">📋 القالب الحالي</div>
+                <div class="template-name">جدول العشر المتقدم</div>
+            </div>
+            <button class="btn btn-secondary" onclick="window.location.href='3-templates.html'">
+                إدارة القوالب
+            </button>
+        </div>
+
+        <!-- Wird Cards - EXPANDED BY DEFAULT -->
+        <div class="wird-card">
+            <div class="wird-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                <div class="wird-title-section">
+                    <span class="wird-icon">📖</span>
+                    <span class="wird-title">الأوراد اليومية</span>
+                </div>
+                <div class="wird-progress-section">
+                    <span class="wird-count">5/5</span>
+                    <span class="wird-percentage">100%</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="wird-body">
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox checked">✓</div>
+                        <div class="item-text completed">قراءة جزء من القرآن</div>
+                    </div>
+                    <div class="item-time">06:30 ص</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox checked">✓</div>
+                        <div class="item-text completed">أذكار الصباح</div>
+                    </div>
+                    <div class="item-time">07:00 ص</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox checked">✓</div>
+                        <div class="item-text completed">أذكار المساء</div>
+                    </div>
+                    <div class="item-time">06:15 م</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox checked">✓</div>
+                        <div class="item-text completed">الاستغفار 100 مرة</div>
+                    </div>
+                    <div class="item-time">08:00 م</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox checked">✓</div>
+                        <div class="item-text completed">الصلاة على النبي 100 مرة</div>
+                    </div>
+                    <div class="item-time">08:15 م</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wird-card">
+            <div class="wird-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                <div class="wird-title-section">
+                    <span class="wird-icon">🕌</span>
+                    <span class="wird-title">الصلوات المفروضة</span>
+                </div>
+                <div class="wird-progress-section">
+                    <span class="wird-count">4/5</span>
+                    <span class="wird-percentage" style="background: #f59e0b;">80%</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="wird-body">
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox checked">✓</div>
+                        <div class="item-text completed">صلاة الفجر</div>
+                    </div>
+                    <div class="item-time">05:45 ص</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox checked">✓</div>
+                        <div class="item-text completed">صلاة الظهر</div>
+                    </div>
+                    <div class="item-time">12:30 م</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox checked">✓</div>
+                        <div class="item-text completed">صلاة العصر</div>
+                    </div>
+                    <div class="item-time">03:45 م</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox"></div>
+                        <div class="item-text">صلاة المغرب</div>
+                    </div>
+                    <div class="item-time">--:--</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox checked">✓</div>
+                        <div class="item-text completed">صلاة العشاء</div>
+                    </div>
+                    <div class="item-time">08:45 م</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wird-card">
+            <div class="wird-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                <div class="wird-title-section">
+                    <span class="wird-icon">📿</span>
+                    <span class="wird-title">النوافل</span>
+                </div>
+                <div class="wird-progress-section">
+                    <span class="wird-count">2/8</span>
+                    <span class="wird-percentage" style="background: #ef4444;">25%</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="wird-body">
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox checked">✓</div>
+                        <div class="item-text completed">قيام الليل</div>
+                    </div>
+                    <div class="item-time">02:30 ص</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox"></div>
+                        <div class="item-text">صلاة الضحى</div>
+                    </div>
+                    <div class="item-time">--:--</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox checked">✓</div>
+                        <div class="item-text completed">السنن الرواتب</div>
+                    </div>
+                    <div class="item-time">متفرقة</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox"></div>
+                        <div class="item-text">صلاة الوتر</div>
+                    </div>
+                    <div class="item-time">--:--</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox"></div>
+                        <div class="item-text">تحية المسجد</div>
+                    </div>
+                    <div class="item-time">--:--</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox"></div>
+                        <div class="item-text">سنة الوضوء</div>
+                    </div>
+                    <div class="item-time">--:--</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox"></div>
+                        <div class="item-text">صلاة الاستخارة</div>
+                    </div>
+                    <div class="item-time">--:--</div>
+                </div>
+                <div class="wird-item">
+                    <div class="item-left">
+                        <div class="checkbox"></div>
+                        <div class="item-text">صلاة التهجد</div>
+                    </div>
+                    <div class="item-time">--:--</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+</body>
+</html>

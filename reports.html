@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقارير</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #14b8a6;
+            --primary-lighter: #99f6e4;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+        }
+        .header {
+            background: var(--surface);
+            padding: 16px 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .report-header {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .report-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .report-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .period-selector {
+            background: var(--surface);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .period-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .period-btns {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .period-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .period-btn.active {
+            border-color: var(--primary);
+            background: var(--primary-lighter);
+            color: var(--primary);
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin: 24px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border);
+        }
+        .item-row {
+            background: var(--surface);
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+        .item-name {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .item-progress {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .progress-bar-mini {
+            width: 100px;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill-mini {
+            height: 100%;
+            border-radius: 4px;
+        }
+        .item-score {
+            font-weight: 700;
+            font-size: 14px;
+            min-width: 70px;
+            text-align: left;
+        }
+        .score-100 { color: var(--success); }
+        .score-80 { color: var(--warning); }
+        .score-low { color: var(--danger); }
+        .fill-100 { background: var(--success); }
+        .fill-80 { background: var(--warning); }
+        .fill-low { background: var(--danger); }
+        .export-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="back-btn" onclick="window.location.href='2-dashboard.html'">←</button>
+        <div class="header-title">📊 تقريري</div>
+    </div>
+
+    <div class="container">
+        <div class="report-header">
+            <div class="report-title">📊 تقرير تقدم: أحمد محمد</div>
+            <div class="report-meta">
+                <span>📅 الفترة: يناير 1 - 30, 2026 (30 يوم)</span>
+                <span>📋 القالب: جدول العشر المتقدم</span>
+                <span>📊 إجمالي البنود: 61 بند</span>
+            </div>
+        </div>
+
+        <div class="period-selector">
+            <div class="period-label">📅 اختر الفترة</div>
+            <div class="period-btns">
+                <button class="period-btn">آخر 7 أيام</button>
+                <button class="period-btn active">آخر 30 يوم</button>
+                <button class="period-btn">هذا الشهر</button>
+                <button class="period-btn">مخصص</button>
+            </div>
+        </div>
+
+        <div class="section-title">📖 الأوراد اليومية</div>
+        <div class="item-row">
+            <div class="item-name">قراءة جزء من القرآن</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-100" style="width: 100%"></div>
+                </div>
+                <div class="item-score score-100">30/30 (100%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">أذكار الصباح</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-100" style="width: 100%"></div>
+                </div>
+                <div class="item-score score-100">30/30 (100%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">أذكار المساء</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-100" style="width: 96.7%"></div>
+                </div>
+                <div class="item-score score-100">29/30 (96.7%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">الاستغفار 100 مرة</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-100" style="width: 93.3%"></div>
+                </div>
+                <div class="item-score score-100">28/30 (93.3%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">الصلاة على النبي 100 مرة</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-80" style="width: 90%"></div>
+                </div>
+                <div class="item-score score-80">27/30 (90.0%)</div>
+            </div>
+        </div>
+
+        <div class="section-title">🕌 الصلوات المفروضة</div>
+        <div class="item-row">
+            <div class="item-name">صلاة الفجر</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-100" style="width: 100%"></div>
+                </div>
+                <div class="item-score score-100">30/30 (100%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">صلاة الظهر</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-100" style="width: 96.7%"></div>
+                </div>
+                <div class="item-score score-100">29/30 (96.7%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">صلاة العصر</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-100" style="width: 96.7%"></div>
+                </div>
+                <div class="item-score score-100">29/30 (96.7%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">صلاة المغرب</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-80" style="width: 90%"></div>
+                </div>
+                <div class="item-score score-80">27/30 (90.0%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">صلاة العشاء</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-80" style="width: 86.7%"></div>
+                </div>
+                <div class="item-score score-80">26/30 (86.7%)</div>
+            </div>
+        </div>
+
+        <div class="section-title">📿 النوافل</div>
+        <div class="item-row">
+            <div class="item-name">السنن الرواتب</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-80" style="width: 80%"></div>
+                </div>
+                <div class="item-score score-80">24/30 (80.0%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">صلاة الوتر</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-80" style="width: 60%"></div>
+                </div>
+                <div class="item-score score-80">18/30 (60.0%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">تحية المسجد</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-80" style="width: 40%"></div>
+                </div>
+                <div class="item-score score-80">12/30 (40.0%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">قيام الليل</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-low" style="width: 26.7%"></div>
+                </div>
+                <div class="item-score score-low">8/30 (26.7%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">صلاة الضحى</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-low" style="width: 16.7%"></div>
+                </div>
+                <div class="item-score score-low">5/30 (16.7%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">سنة الوضوء</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-low" style="width: 13.3%"></div>
+                </div>
+                <div class="item-score score-low">4/30 (13.3%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">صلاة الاستخارة</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-low" style="width: 6.7%"></div>
+                </div>
+                <div class="item-score score-low">2/30 (6.7%)</div>
+            </div>
+        </div>
+        <div class="item-row">
+            <div class="item-name">صلاة التهجد</div>
+            <div class="item-progress">
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini fill-low" style="width: 6.7%"></div>
+                </div>
+                <div class="item-score score-low">2/30 (6.7%)</div>
+            </div>
+        </div>
+
+        <button class="export-btn">📥 تصدير التقرير (PDF)</button>
+    </div>
+
+
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+</body>
+</html>

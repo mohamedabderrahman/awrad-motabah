@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإشعارات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #14b8a6;
+            --primary-lighter: #99f6e4;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+        }
+        .header {
+            background: var(--surface);
+            padding: 16px 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .mark-all {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .filter-btn.active {
+            border-color: var(--primary);
+            background: var(--primary-lighter);
+            color: var(--primary);
+        }
+        .notification {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            border-right: 4px solid var(--primary);
+        }
+        .notification.read {
+            border-right-color: var(--border);
+            opacity: 0.7;
+        }
+        .notif-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .notif-icon {
+            font-size: 20px;
+            margin-left: 8px;
+        }
+        .notif-title {
+            font-weight: 700;
+            font-size: 16px;
+            flex: 1;
+        }
+        .notif-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .notif-body {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .notif-action {
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <button class="back-btn" onclick="window.location.href='2-dashboard.html'">←</button>
+            <div class="header-title">🔔 الإشعارات (3)</div>
+        </div>
+        <button class="mark-all">تحديد الكل كمقروء</button>
+    </div>
+
+    <div class="container">
+        <div class="filters">
+            <button class="filter-btn active">الكل</button>
+            <button class="filter-btn">غير مقروء</button>
+            <button class="filter-btn">مقروء</button>
+        </div>
+
+        <div class="notification">
+            <div class="notif-header">
+                <div style="display: flex; align-items: flex-start;">
+                    <span class="notif-icon">✨</span>
+                    <div class="notif-title">تم تحديث القالب الافتراضي</div>
+                </div>
+                <div class="notif-time">منذ ساعتين</div>
+            </div>
+            <div class="notif-body">
+                تمت إضافة 2 بند جديد إلى "جدول العشر المتقدم":<br>
+                • قراءة القرآن الليلي<br>
+                • صلاة التهجد
+            </div>
+            <button class="notif-action" onclick="window.location.href='2-dashboard.html'">عرض التفاصيل</button>
+        </div>
+
+        <div class="notification">
+            <div class="notif-header">
+                <div style="display: flex; align-items: flex-start;">
+                    <span class="notif-icon">📋</span>
+                    <div class="notif-title">قالب جديد متاح</div>
+                </div>
+                <div class="notif-time">منذ 5 ساعات</div>
+            </div>
+            <div class="notif-body">
+                "الورد الأسبوعي" من الإدارة متاح الآن.<br>
+                يحتوي على 5 كروت و 32 بند مناسب للأسبوع.
+            </div>
+            <button class="notif-action" onclick="window.location.href='3-templates.html'">استكشاف</button>
+        </div>
+
+        <div class="notification read">
+            <div class="notif-header">
+                <div style="display: flex; align-items: flex-start;">
+                    <span class="notif-icon">👑</span>
+                    <div class="notif-title">تمت ترقيتك كمشرف</div>
+                </div>
+                <div class="notif-time">منذ يوم واحد</div>
+            </div>
+            <div class="notif-body">
+                يمكنك الآن إدارة القوالب ومتابعة المستخدمين<br>
+                والوصول إلى لوحة الإدارة الكاملة.
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+</body>
+</html>

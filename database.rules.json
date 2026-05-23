@@ -1,0 +1,71 @@
+{
+  "rules": {
+    "tenants": {
+      "$tenantId": {
+        // Tenant config - readable by all authenticated users in tenant
+        "config": {
+          ".read": "auth != null",
+          ".write": "root.child('superadmin').child(auth.uid).exists()"
+        },
+        
+        // Admins list
+        "admins": {
+          ".read": "auth != null",
+          "$adminId": {
+            ".write": "root.child('superadmin').child(auth.uid).exists() || root.child('tenants').child($tenantId).child('admins').child(auth.uid).exists()"
+          }
+        },
+        
+        // Users data
+        "users": {
+          "$userId": {
+            // User can read/write their own data
+            ".read": "$userId === auth.uid || root.child('tenants').child($tenantId).child('admins').child(auth.uid).exists()",
+            ".write": "$userId === auth.uid",
+            
+            // Progress data
+            "progress": {
+              ".read": "$userId === auth.uid || root.child('tenants').child($tenantId).child('admins').child(auth.uid).exists()",
+              ".write": "$userId === auth.uid"
+            },
+            
+            // Watch status
+            "watchStatus": {
+              ".read": "$userId === auth.uid || root.child('tenants').child($tenantId).child('admins').child(auth.uid).exists()",
+              ".write": "$userId === auth.uid || root.child('tenants').child($tenantId).child('admins').child(auth.uid).exists()"
+            },
+            
+            // Notifications
+            "notifications": {
+              ".read": "$userId === auth.uid",
+              ".write": "$userId === auth.uid || root.child('tenants').child($tenantId).child('admins').child(auth.uid).exists()"
+            }
+          }
+        },
+        
+        // Templates
+        "templates": {
+          ".read": "auth != null",
+          "admin": {
+            "$templateId": {
+              ".write": "root.child('tenants').child($tenantId).child('admins').child(auth.uid).exists()"
+            }
+          },
+          "user": {
+            "$userId": {
+              "$templateId": {
+                ".write": "$userId === auth.uid"
+              }
+            }
+          }
+        }
+      }
+    },
+    
+    // Super admin list
+    "superadmin": {
+      ".read": "root.child('superadmin').child(auth.uid).exists()",
+      ".write": "root.child('superadmin').child(auth.uid).exists()"
+    }
+  }
+}

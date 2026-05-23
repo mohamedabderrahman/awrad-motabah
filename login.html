@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - الورد اليومي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #14b8a6;
+            --primary-light: #2dd4bf;
+            --primary-lighter: #99f6e4;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--surface) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        body.theme-pink {
+            background: linear-gradient(135deg, #fbcfe8 0%, #ffffff 100%);
+        }
+
+        body.theme-pink .app-logo {
+            background: #fbcfe8;
+            box-shadow: 0 8px 24px rgba(236, 72, 153, 0.2);
+        }
+
+        body.theme-pink .app-title {
+            color: #ec4899;
+        }
+
+        body.theme-pink .google-btn:hover {
+            border-color: #ec4899;
+            background: #fbcfe8;
+            box-shadow: 0 8px 24px rgba(236, 72, 153, 0.2);
+        }
+
+        .login-container {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 50px 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .app-logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 25px;
+            background: var(--primary-lighter);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            box-shadow: 0 8px 24px rgba(20, 184, 166, 0.2);
+        }
+
+        .app-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .app-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 50px;
+            line-height: 1.6;
+        }
+
+        .google-btn {
+            width: 100%;
+            padding: 18px 24px;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .google-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-lighter);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(20, 184, 166, 0.2);
+        }
+
+        .google-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .google-icon {
+            font-size: 24px;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 20px;
+            color: var(--text-secondary);
+        }
+
+        .error {
+            display: none;
+            margin-top: 20px;
+            padding: 12px;
+            background: #fee2e2;
+            color: #dc2626;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .tenant-badge {
+            display: inline-block;
+            background: var(--primary-lighter);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="app-logo">🕌</div>
+        <h1 class="app-title">الورد اليومي</h1>
+        <p class="app-subtitle">
+            تطبيق الأوراد والأعمال اليومية<br>
+            تتبع تقدمك الروحاني يومياً
+        </p>
+
+        <button class="google-btn" id="signInBtn">
+            <span class="google-icon">🔵</span>
+            <span>تسجيل الدخول بحساب Google</span>
+        </button>
+
+        <div class="loading" id="loading">
+            ⏳ جاري تسجيل الدخول...
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div id="tenantInfo" style="margin-top: 30px; display: none;">
+            <span class="tenant-badge" id="tenantBadge"></span>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+
+    <script>
+        // Display tenant info
+        document.getElementById('tenantInfo').style.display = 'block';
+        document.getElementById('tenantBadge').textContent = tenantManager.config?.name || tenantManager.tenantId;
+
+        // Sign in button handler
+        document.getElementById('signInBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('signInBtn');
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+
+            btn.disabled = true;
+            loading.style.display = 'block';
+            error.style.display = 'none';
+
+            try {
+                await authManager.signInWithGoogle();
+                
+                // Redirect based on role
+                if (authManager.userRole === 'superadmin') {
+                    window.location.href = 'super-admin.html';
+                } else if (authManager.userRole === 'admin') {
+                    window.location.href = 'admin-panel.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            } catch (err) {
+                console.error('Sign-in error:', err);
+                error.textContent = '❌ حدث خطأ في تسجيل الدخول: ' + err.message;
+                error.style.display = 'block';
+                btn.disabled = false;
+                loading.style.display = 'none';
+            }
+        });
+
+        // Check if already signed in
+        authManager.onAuthStateChanged((user, role) => {
+            if (user) {
+                // Already signed in, redirect
+                if (role === 'superadmin') {
+                    window.location.href = 'super-admin.html';
+                } else if (role === 'admin') {
+                    window.location.href = 'admin-panel.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

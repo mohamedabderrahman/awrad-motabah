@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الإدارة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #14b8a6;
+            --primary-lighter: #99f6e4;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+        }
+        .header {
+            background: var(--surface);
+            padding: 16px 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .admin-badge {
+            background: #f59e0b;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+        .tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .section {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 6px 14px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .filter-btn.active {
+            border-color: var(--primary);
+            background: var(--primary-lighter);
+            color: var(--primary);
+        }
+        .user-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .user-item:last-child {
+            border-bottom: none;
+        }
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .user-name {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .user-email {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        .user-stats {
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .watch-badge {
+            background: #fef3c7;
+            color: #f59e0b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .watch-active {
+            background: #d1fae5;
+            color: #059669;
+        }
+        .watch-mandatory {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .btn-sm {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-accept {
+            background: var(--success);
+            color: white;
+        }
+        .btn-reject {
+            background: var(--surface);
+            border: 2px solid #ef4444;
+            color: #ef4444;
+        }
+        .btn-view {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-stop {
+            background: var(--surface);
+            border: 2px solid #ef4444;
+            color: #ef4444;
+        }
+        .btn-request {
+            background: var(--surface);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-force {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-promote {
+            background: var(--surface);
+            border: 2px solid #f59e0b;
+            color: #f59e0b;
+        }
+        .user-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .request-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        @media (max-width: 768px) {
+            .user-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .user-actions {
+                width: 100%;
+            }
+            .btn-sm {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-title">
+            <span>👑 لوحة الإدارة</span>
+            <span class="admin-badge">مشرف</span>
+        </div>
+        <button class="back-btn" onclick="window.location.href='2-dashboard-fixed.html'">✕</button>
+    </div>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">👥 المستخدمون</div>
+                <div class="stat-value">785</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">📊 النشطون اليوم</div>
+                <div class="stat-value">623</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">👁️ طلبات معلقة</div>
+                <div class="stat-value">5</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">✅ معدل الإنجاز</div>
+                <div class="stat-value">82%</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active">أداء المستخدمين</button>
+            <button class="tab" onclick="window.location.href='9-admin-stats.html'">إحصائيات البنود</button>
+            <button class="tab">القوالب</button>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">👥 المستخدمون (785)</div>
+                <div class="filter-group">
+                    <button class="filter-btn active">الكل</button>
+                    <button class="filter-btn">👁️ يطلب متابعة (5)</button>
+                    <button class="filter-btn">✅ متابعة نشطة (42)</button>
+                    <button class="filter-btn">🔒 إجبارية (8)</button>
+                    <button class="filter-btn">👑 مشرفون (4)</button>
+                </div>
+            </div>
+
+            <input type="text" class="search-box" placeholder="🔍 ابحث عن مستخدم...">
+
+            <!-- أنا (المشرف نفسه - دائماً أول واحد) -->
+            <div class="user-item" style="background: var(--primary-lighter); border-radius: 8px; margin-bottom: 12px;">
+                <div class="user-info">
+                    <div class="user-name">
+                        👤 أنا (معاذ صلاح الدين)
+                        <span class="admin-badge">مشرف</span>
+                    </div>
+                    <div class="user-email">moatazsalaheddin@gmail.com</div>
+                    <div class="user-stats">✅ 59.3 بند/يوم (97.2%)</div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-sm btn-view" onclick="window.location.href='5-reports.html'">📊 تقريري</button>
+                </div>
+            </div>
+
+            <!-- Pending Request 1 -->
+            <div class="user-item">
+                <div class="user-info">
+                    <div class="user-name">
+                        👁️ فاطمة أحمد
+                        <span class="watch-badge">يطلب المتابعة</span>
+                    </div>
+                    <div class="user-email">fatima@example.com</div>
+                    <div class="user-stats">✅ 58.2 بند/يوم (95.4%)</div>
+                    <div class="request-info">
+                        📅 طلب المتابعة: منذ 3 أيام
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-sm btn-accept" onclick="alert('تم قبول طلب المتابعة ✅')">✅ قبول</button>
+                    <button class="btn-sm btn-reject" onclick="alert('تم رفض الطلب ❌')">❌ رفض</button>
+                    <button class="btn-sm btn-promote" onclick="alert('تم ترقية فاطمة أحمد كمشرف 👑')">👑 ترقية كمشرف</button>
+                </div>
+            </div>
+
+            <!-- Pending Request 2 -->
+            <div class="user-item">
+                <div class="user-info">
+                    <div class="user-name">
+                        👁️ أحمد محمد
+                        <span class="watch-badge">يطلب المتابعة</span>
+                    </div>
+                    <div class="user-email">ahmed@example.com</div>
+                    <div class="user-stats">✅ 52.6 بند/يوم (86.2%)</div>
+                    <div class="request-info">
+                        📅 طلب المتابعة: منذ أسبوع
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-sm btn-accept">✅ قبول</button>
+                    <button class="btn-sm btn-reject">❌ رفض</button>
+                    <button class="btn-sm btn-promote">👑 ترقية</button>
+                </div>
+            </div>
+
+            <!-- Active Watch -->
+            <div class="user-item">
+                <div class="user-info">
+                    <div class="user-name">
+                        ✅ خالد عبد الله
+                        <span class="watch-badge watch-active">متابعة نشطة</span>
+                    </div>
+                    <div class="user-email">khaled@example.com</div>
+                    <div class="user-stats">✅ 51.8 بند/يوم (84.9%)</div>
+                    <div class="request-info">
+                        👁️ المتابعة نشطة منذ: 15 يوم
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-sm btn-view" onclick="window.location.href='5-reports.html'">📊 عرض</button>
+                    <button class="btn-sm btn-stop">❌ إيقاف</button>
+                    <button class="btn-sm btn-promote">👑 ترقية</button>
+                </div>
+            </div>
+
+            <!-- Admin User -->
+            <div class="user-item" style="background: #fef3c7; border-radius: 8px;">
+                <div class="user-info">
+                    <div class="user-name">
+                        👑 مريم صلاح الدين
+                        <span class="admin-badge">مشرف</span>
+                    </div>
+                    <div class="user-email">mariamsalaheddin@gmail.com</div>
+                    <div class="user-stats">✅ 56.7 بند/يوم (92.9%)</div>
+                    <div class="request-info">
+                        👑 مشرف منذ: 3 أشهر
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-sm btn-view">📊 عرض</button>
+                    <button class="btn-sm btn-reject">🔻 إزالة صلاحية</button>
+                </div>
+            </div>
+
+            <!-- Mandatory Watch -->
+            <div class="user-item">
+                <div class="user-info">
+                    <div class="user-name">
+                        🔒 سارة علي
+                        <span class="watch-badge watch-mandatory">متابعة إجبارية</span>
+                    </div>
+                    <div class="user-email">sara@example.com</div>
+                    <div class="user-stats">✅ 47.2 بند/يوم (77.4%)</div>
+                    <div class="request-info">
+                        🔒 فرضتها أنت منذ: شهر واحد
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-sm btn-view">📊 عرض</button>
+                    <button class="btn-sm btn-stop">🔓 إلغاء</button>
+                    <button class="btn-sm btn-promote">👑 ترقية</button>
+                </div>
+            </div>
+
+            <!-- Normal User -->
+            <div class="user-item">
+                <div class="user-info">
+                    <div class="user-name">محمد علي</div>
+                    <div class="user-email">mohamed@example.com</div>
+                    <div class="user-stats">✅ 49.8 بند/يوم (81.6%)</div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-sm btn-request">👁️ طلب متابعة</button>
+                    <button class="btn-sm btn-force">⚡ فرض</button>
+                    <button class="btn-sm btn-view">📊 عرض</button>
+                    <button class="btn-sm btn-promote">👑 ترقية</button>
+                </div>
+            </div>
+
+            <!-- Normal User 2 -->
+            <div class="user-item">
+                <div class="user-info">
+                    <div class="user-name">عبد الرحمن حسن</div>
+                    <div class="user-email">abdulrahman@example.com</div>
+                    <div class="user-stats">✅ 45.3 بند/يوم (74.3%)</div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-sm btn-request">👁️ طلب متابعة</button>
+                    <button class="btn-sm btn-force">⚡ فرض</button>
+                    <button class="btn-sm btn-view">📊 عرض</button>
+                    <button class="btn-sm btn-promote">👑 ترقية</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+</body>
+</html>
